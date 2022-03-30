@@ -1,6 +1,4 @@
 import 'package:admin/screens/auth/login_screen.dart';
-import 'package:admin/screens/auth/register_screen.dart';
-import 'package:admin/screens/main/main_screen.dart';
 import 'package:admin/utility/constants.dart';
 import 'package:flutter/material.dart';
 
