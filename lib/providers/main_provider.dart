@@ -53,9 +53,26 @@ class MainProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  setUpdateUser(user) {
+  setUpdateUser(ModelUser user) {
     _user = user;
     notifyListeners();
+  }
+
+  login(context, email, pass) async {
+    EasyLoading.show(status: "Loading...");
+    String? token = await ApiAuthentication.instance.apiLogin(email, pass);
+    if (token != null) {
+      var dataUser = await SessionManager.instance.getUser();
+      if (dataUser != null) {
+        var newUser = ModelUser.fromJson(json.decode(dataUser));
+        setUpdateUser(newUser);
+      }
+
+      EasyLoading.dismiss();
+      Navigator.pushReplacementNamed(context, MainScreen.KEY);
+    } else {
+      EasyLoading.showError("Login Failed");
+    }
   }
 
   Future initSession(context) async {

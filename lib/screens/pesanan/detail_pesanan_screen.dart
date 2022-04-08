@@ -1,4 +1,5 @@
 import 'package:admin/models/model_pesanan.dart';
+import 'package:admin/responsive.dart';
 import 'package:admin/screens/paket_wedding/preview_image_screen.dart';
 import 'package:admin/utility/constants.dart';
 import 'package:admin/utility/helpers.dart';
@@ -65,6 +66,8 @@ class _DetailPesananScreenState extends State<DetailPesananScreen> {
                           child: ExtendedImage.network(
                             paketWedding.image ?? "",
                             fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: Responsive.isDesktop(context) ? 40.h : null,
                             cache: true,
                             shape: BoxShape.rectangle,
                             borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -87,14 +90,14 @@ class _DetailPesananScreenState extends State<DetailPesananScreen> {
                                     child: Text(
                                       total.output.symbolOnRight,
                                       style: TextStyle(
-                                        fontSize: 10.sp,
+                                        fontSize: 15,
                                       ),
                                     ),
                                   ),
                                   Text(
                                     Helpers.dateFormater(widget.pesanan.passingData.createdAt),
                                     style: TextStyle(
-                                      fontSize: 10.sp,
+                                      fontSize: 15,
                                     ),
                                   ),
                                 ],
@@ -111,7 +114,7 @@ class _DetailPesananScreenState extends State<DetailPesananScreen> {
                                       child: Text(
                                         widget.pesanan.passingData.notes,
                                         style: TextStyle(
-                                          fontSize: 10.sp,
+                                          fontSize: 15,
                                         ),
                                       ),
                                     )

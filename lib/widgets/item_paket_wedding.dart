@@ -59,7 +59,7 @@ class ItemPaketWedding extends StatelessWidget {
                 children: [
                   Container(
                     width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 5.sp, vertical: 3.sp),
+                    padding: EdgeInsets.symmetric(horizontal: 3.sp, vertical: 1.sp),
                     decoration: BoxDecoration(
                       color: green.withOpacity(0.7),
                       borderRadius: BorderRadius.circular(2.sp),
@@ -70,6 +70,7 @@ class ItemPaketWedding extends StatelessWidget {
                     paketWedding.namaPaket,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.caption!.copyWith(color: Colors.white),
                   ),
                   Text(
                     paketWedding.keterangan,
@@ -138,7 +139,7 @@ class ItemPesanan extends StatelessWidget {
                 children: [
                   Container(
                     width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 5.sp, vertical: 3.sp),
+                    padding: EdgeInsets.symmetric(horizontal: 3.sp, vertical: 1.sp),
                     decoration: BoxDecoration(
                       color: green.withOpacity(0.7),
                       borderRadius: BorderRadius.circular(2.sp),
@@ -148,6 +149,7 @@ class ItemPesanan extends StatelessWidget {
                   Text(
                     pesanan.paketWedding.namaPaket,
                     maxLines: 1,
+                    style: Theme.of(context).textTheme.caption!.copyWith(color: Colors.white),
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(

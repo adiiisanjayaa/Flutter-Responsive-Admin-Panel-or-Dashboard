@@ -1,4 +1,5 @@
 import 'package:admin/models/model_paket_wedding.dart';
+import 'package:admin/responsive.dart';
 import 'package:admin/screens/paket_wedding/preview_image_screen.dart';
 import 'package:admin/screens/pesanan/konfirmasi_pesanan_screen.dart';
 import 'package:admin/utility/constants.dart';
@@ -65,13 +66,15 @@ class _DetailPaketWeddingScreenState extends State<DetailPaketWeddingScreen> {
                           child: ExtendedImage.network(
                             paketWedding.image ?? "",
                             fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: Responsive.isDesktop(context) ? 40.h : null,
                             cache: true,
                             shape: BoxShape.rectangle,
                             borderRadius: BorderRadius.all(Radius.circular(5)),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.all(3.w),
+                          padding: EdgeInsets.all(15),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -87,14 +90,14 @@ class _DetailPaketWeddingScreenState extends State<DetailPaketWeddingScreen> {
                                     child: Text(
                                       paketWedding.status.toUpperCase(),
                                       style: TextStyle(
-                                        fontSize: 10.sp,
+                                        fontSize: 15,
                                       ),
                                     ),
                                   ),
                                   Text(
                                     Helpers.dateFormater(paketWedding.createdAt),
                                     style: TextStyle(
-                                      fontSize: 10.sp,
+                                      fontSize: 15,
                                     ),
                                   ),
                                 ],

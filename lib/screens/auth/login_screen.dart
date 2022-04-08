@@ -1,14 +1,17 @@
-import 'package:admin/api/api_authentication.dart';
+import 'package:admin/providers/main_provider.dart';
+import 'package:admin/responsive.dart';
 import 'package:admin/screens/auth/register_screen.dart';
-import 'package:admin/screens/main/main_screen.dart';
 import 'package:admin/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 class LoginScreen extends StatelessWidget {
   static const KEY = "/LoginScreen";
   @override
   Widget build(BuildContext context) {
+    var mainProvider = context.read<MainProvider>();
     TextEditingController eEmail = TextEditingController();
     TextEditingController ePass = TextEditingController();
     return Scaffold(
@@ -19,7 +22,7 @@ class LoginScreen extends StatelessWidget {
           children: <Widget>[
             Container(
               height: 400,
-              decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/background.png'), fit: BoxFit.fill)),
+              decoration: Responsive.isMobile(context) ? BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/background.png'), fit: BoxFit.fill)) : null,
               child: Stack(
                 children: <Widget>[
                   Positioned(
@@ -61,7 +64,8 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(
+            Container(
+              width: Responsive.isMobile(context) ? null : 50.w,
               padding: EdgeInsets.all(30.0),
               child: Column(
                 children: <Widget>[
@@ -109,12 +113,7 @@ class LoginScreen extends StatelessWidget {
                   CustomButton(
                     onTap: () async {
                       if (eEmail.text.isNotEmpty && ePass.text.isNotEmpty) {
-                        String? token = await ApiAuthentication.instance.apiLogin(eEmail.text, ePass.text);
-                        if (token != null) {
-                          Navigator.pushReplacementNamed(context, MainScreen.KEY);
-                        } else {
-                          EasyLoading.showError("Login Failed");
-                        }
+                        mainProvider.login(context, eEmail.text, ePass.text);
                       } else {
                         EasyLoading.showError("Email and Password must be filled");
                       }

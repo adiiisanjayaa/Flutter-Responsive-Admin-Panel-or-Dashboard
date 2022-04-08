@@ -24,12 +24,7 @@ class Header extends StatelessWidget {
             icon: Icon(Icons.menu),
             onPressed: context.read<MenuProvider>().controlMenu,
           ),
-        if (!Responsive.isMobile(context))
-          Text(
-            "Bali Wedding",
-            style: Theme.of(context).textTheme.headline6,
-          ),
-        if (!Responsive.isMobile(context)) Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+
         // Expanded(child: SearchField()),
         Expanded(
           child: Text(

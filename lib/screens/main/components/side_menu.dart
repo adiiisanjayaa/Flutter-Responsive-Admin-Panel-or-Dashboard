@@ -1,4 +1,5 @@
 import 'package:admin/providers/main_provider.dart';
+import 'package:admin/responsive.dart';
 import 'package:admin/screens/auth/login_screen.dart';
 import 'package:admin/screens/profile/profile_screen.dart';
 import 'package:admin/utility/constants.dart';
@@ -28,7 +29,7 @@ class SideMenu extends StatelessWidget {
             svgSrc: "assets/icons/menu_dashbord.svg",
             press: () {
               mainProvider.onSideBarItemTap(context, 0);
-              Navigator.pop(context);
+              if (!Responsive.isDesktop(context)) Navigator.pop(context);
             },
             index: 0,
           ),
@@ -37,7 +38,7 @@ class SideMenu extends StatelessWidget {
             svgSrc: "assets/icons/menu_store.svg",
             press: () {
               mainProvider.onSideBarItemTap(context, 1);
-              Navigator.pop(context);
+              if (!Responsive.isDesktop(context)) Navigator.pop(context);
             },
             index: 1,
           ),

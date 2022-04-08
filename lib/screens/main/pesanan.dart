@@ -18,20 +18,21 @@ class PesananScreen extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  flex: 5,
-                  child: Column(
-                    children: [
-                      //Mobile version
-                      if (Responsive.isMobile(context)) ListPesanan(),
-                    ],
+                if (Responsive.isMobile(context))
+                  Expanded(
+                    // flex: 5,
+                    child: Column(
+                      children: [
+                        //Mobile version
+                        ListPesanan(),
+                      ],
+                    ),
                   ),
-                ),
                 if (!Responsive.isMobile(context)) SizedBox(width: defaultPadding),
                 // On Mobile means if the screen is less than 850 we dont want to show it
                 if (!Responsive.isMobile(context))
                   Expanded(
-                    flex: 2,
+                    // flex: 2,
                     child: ListPesanan(),
                   ),
               ],

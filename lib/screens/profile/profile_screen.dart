@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:admin/api/api_user.dart';
 import 'package:admin/providers/main_provider.dart';
+import 'package:admin/responsive.dart';
 import 'package:admin/screens/auth/login_screen.dart';
 import 'package:admin/utility/session_manager.dart';
 import 'package:extended_image/extended_image.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 class ProfileScreen extends StatefulWidget {
   static const KEY = "/ProfileScreen";
@@ -42,6 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(mainProvider.user!.image);
     return Scaffold(
         appBar: AppBar(
           title: Text("Profile"),
@@ -58,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: <Widget>[
                   Container(
                     height: 400,
-                    decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/background.png'), fit: BoxFit.fill)),
+                    decoration: Responsive.isMobile(context) ? BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/background.png'), fit: BoxFit.fill)) : null,
                     child: Stack(
                       children: <Widget>[
                         Positioned(
@@ -132,7 +135,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                   ),
-                  Padding(
+                  Container(
+                    width: Responsive.isMobile(context) ? null : 50.w,
                     padding: EdgeInsets.all(30.0),
                     child: Column(
                       children: <Widget>[

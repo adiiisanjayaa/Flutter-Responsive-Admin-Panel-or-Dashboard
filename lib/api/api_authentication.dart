@@ -53,7 +53,6 @@ class ApiAuthentication {
         _urlLogin,
         data: Helpers.buildLoginData(email, password),
       );
-      print(response.data);
       ModelUser user = ModelUser.fromJson(response.data["user"]);
       String jwt = response.data["jwt"];
       SessionManager.instance.setBearerToken(jwt);

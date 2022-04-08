@@ -1,12 +1,13 @@
 import 'package:admin/models/model_pesanan.dart';
 import 'package:admin/providers/main_provider.dart';
 import 'package:admin/providers/pesanan_provider.dart';
+import 'package:admin/responsive.dart';
 import 'package:admin/screens/pesanan/detail_pesanan_screen.dart';
 import 'package:admin/utility/route_argument.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
-
+import 'package:sizer/sizer.dart';
 import '../../../utility/constants.dart';
 import 'item_paket_wedding.dart';
 
@@ -51,21 +52,44 @@ class _ListPesananState extends State<ListPesanan> {
           Consumer<PesananProvider>(builder: (context, pesananProvider, _) {
             return pesananProvider.pesanan.isEmpty
                 ? SizedBox.shrink()
-                : ListView.builder(
-                    itemCount: pesananProvider.pesanan.length,
-                    shrinkWrap: true,
-                    primary: false,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, DetailPesananScreen.KEY, arguments: RouteArgument<ModelPesanan>(passingData: pesananProvider.pesanan[index]));
+                : Responsive.isMobile(context)
+                    ? ListView.builder(
+                        itemCount: pesananProvider.pesanan.length,
+                        shrinkWrap: true,
+                        primary: false,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, DetailPesananScreen.KEY, arguments: RouteArgument<ModelPesanan>(passingData: pesananProvider.pesanan[index]));
+                            },
+                            child: ItemPesanan(
+                              pesanan: pesananProvider.pesanan[index],
+                            ),
+                          );
                         },
-                        child: ItemPesanan(
-                          pesanan: pesananProvider.pesanan[index],
+                      )
+                    : GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          childAspectRatio: 4.0 / 1.4,
+                          crossAxisCount: 2,
                         ),
+                        itemCount: pesananProvider.pesanan.length,
+                        shrinkWrap: true,
+                        primary: false,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, DetailPesananScreen.KEY, arguments: RouteArgument<ModelPesanan>(passingData: pesananProvider.pesanan[index]));
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.all(1.w),
+                              child: ItemPesanan(
+                                pesanan: pesananProvider.pesanan[index],
+                              ),
+                            ),
+                          );
+                        },
                       );
-                    },
-                  );
           }),
         ],
       ),

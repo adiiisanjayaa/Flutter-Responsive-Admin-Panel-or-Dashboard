@@ -35,7 +35,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           children: <Widget>[
             Container(
               height: 400,
-              decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/background.png'), fit: BoxFit.fill)),
+              decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/png'), fit: BoxFit.fill)),
               child: Stack(
                 children: <Widget>[
                   Positioned(

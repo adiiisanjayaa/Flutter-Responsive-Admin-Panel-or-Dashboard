@@ -1,6 +1,7 @@
 import 'package:admin/responsive.dart';
 import 'package:admin/widgets/header.dart';
 import 'package:admin/widgets/list_paket_wedding.dart';
+import 'package:admin/widgets/list_paket_wedding_web.dart';
 import 'package:flutter/material.dart';
 
 import '../../utility/constants.dart';
@@ -23,21 +24,22 @@ class _PaketWeddingScreenState extends State<PaketWeddingScreen> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  flex: 5,
-                  child: Column(
-                    children: [
-                      //Mobile version
-                      if (Responsive.isMobile(context)) ListPaketWedding(),
-                    ],
+                if (Responsive.isMobile(context))
+                  Expanded(
+                    // flex: 5,
+                    child: Column(
+                      children: [
+                        //Mobile version
+                        ListPaketWedding(),
+                      ],
+                    ),
                   ),
-                ),
                 if (!Responsive.isMobile(context)) SizedBox(width: defaultPadding),
                 // On Mobile means if the screen is less than 850 we dont want to show it
                 if (!Responsive.isMobile(context))
                   Expanded(
-                    flex: 2,
-                    child: ListPaketWedding(),
+                    // flex: 2,
+                    child: ListPaketWeddingWeb(),
                   ),
               ],
             )
