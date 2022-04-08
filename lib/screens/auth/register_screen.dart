@@ -1,5 +1,6 @@
 import 'package:admin/screens/auth/login_screen.dart';
 import 'package:admin/screens/main/main_screen.dart';
+import 'package:admin/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -99,25 +100,11 @@ class RegisterScreen extends StatelessWidget {
                   SizedBox(
                     height: 30,
                   ),
-                  GestureDetector(
-                    onTap: () {
+                  CustomButton(
+                    onTap: () async {
                       Navigator.pushReplacementNamed(context, MainScreen.KEY);
                     },
-                    child: Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          gradient: LinearGradient(colors: [
-                            Color.fromRGBO(143, 148, 251, 1),
-                            Color.fromRGBO(143, 148, 251, .6),
-                          ])),
-                      child: Center(
-                        child: Text(
-                          "Register",
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
+                    title: "Register",
                   ),
                   SizedBox(
                     height: 70,

@@ -2,7 +2,9 @@ import 'package:admin/providers/main_provider.dart';
 import 'package:admin/screens/auth/login_screen.dart';
 import 'package:admin/screens/profile/profile_screen.dart';
 import 'package:admin/utility/constants.dart';
+import 'package:admin/utility/session_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
@@ -50,7 +52,10 @@ class SideMenu extends StatelessWidget {
           DrawerListTile(
             title: "Logout",
             svgSrc: "assets/icons/menu_setting.svg",
-            press: () {
+            press: () async {
+              EasyLoading.show(status: "Loading...");
+              await SessionManager.instance.logout();
+              EasyLoading.dismiss();
               Navigator.pushReplacementNamed(context, LoginScreen.KEY);
             },
             index: 4,

@@ -1,18 +1,35 @@
-import 'package:admin/api/api_authentication.dart';
-import 'package:admin/screens/auth/register_screen.dart';
+import 'package:admin/api/api_pesanan.dart';
+import 'package:admin/models/model_paket_wedding.dart';
+import 'package:admin/models/model_pesanan.dart';
+import 'package:admin/providers/main_provider.dart';
 import 'package:admin/screens/main/main_screen.dart';
+import 'package:admin/utility/route_argument.dart';
 import 'package:admin/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_braintree/flutter_braintree.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:provider/provider.dart';
 
-class LoginScreen extends StatelessWidget {
-  static const KEY = "/LoginScreen";
+class KonfirmasiPesananScreen extends StatefulWidget {
+  static const KEY = "/KonfirmasiPesananScreen";
+  final RouteArgument<ModelPaketWedding> paketWedding;
+  const KonfirmasiPesananScreen({
+    Key? key,
+    required this.paketWedding,
+  }) : super(key: key);
+
+  @override
+  State<KonfirmasiPesananScreen> createState() => _KonfirmasiPesananScreenState();
+}
+
+class _KonfirmasiPesananScreenState extends State<KonfirmasiPesananScreen> {
+  TextEditingController eNotes = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController eEmail = TextEditingController();
-    TextEditingController ePass = TextEditingController();
+    var paketWedding = widget.paketWedding.passingData;
+    var mainProvider = context.read<MainProvider>();
     return Scaffold(
-        // backgroundColor: Colors.white,
         body: SingleChildScrollView(
       child: Container(
         child: Column(
@@ -52,7 +69,7 @@ class LoginScreen extends StatelessWidget {
                       margin: EdgeInsets.only(top: 50),
                       child: Center(
                         child: Text(
-                          "Login",
+                          paketWedding.namaPaket,
                           style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -76,30 +93,18 @@ class LoginScreen extends StatelessWidget {
                           padding: EdgeInsets.all(8.0),
                           decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey))),
                           child: TextField(
-                            controller: eEmail,
+                            controller: eNotes,
+                            minLines: 3,
+                            maxLines: 5,
                             decoration: InputDecoration(
                               border: InputBorder.none,
-                              hintText: "Email or Phone number",
+                              hintText: "Notes",
                               hintStyle: TextStyle(
                                 color: Colors.grey[400],
                               ),
                             ),
                           ),
                         ),
-                        Container(
-                          padding: EdgeInsets.all(8.0),
-                          child: TextField(
-                            controller: ePass,
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: "Password",
-                              hintStyle: TextStyle(
-                                color: Colors.grey[400],
-                              ),
-                            ),
-                          ),
-                        )
                       ],
                     ),
                   ),
@@ -108,30 +113,36 @@ class LoginScreen extends StatelessWidget {
                   ),
                   CustomButton(
                     onTap: () async {
-                      if (eEmail.text.isNotEmpty && ePass.text.isNotEmpty) {
-                        String? token = await ApiAuthentication.instance.apiLogin(eEmail.text, ePass.text);
-                        if (token != null) {
-                          Navigator.pushReplacementNamed(context, MainScreen.KEY);
+                      final request = BraintreeDropInRequest(
+                        clientToken: 'sandbox_9qscg4sx_hy3cv2djtg9ph6xq',
+                        collectDeviceData: true,
+                        googlePaymentRequest: BraintreeGooglePaymentRequest(
+                          totalPrice: paketWedding.totalHarga.toString(),
+                          currencyCode: 'IDR',
+                          billingAddressRequired: false,
+                        ),
+                        paypalRequest: BraintreePayPalRequest(
+                          amount: paketWedding.totalHarga.toString(),
+                          displayName: 'Bali Wedding',
+                        ),
+                      );
+
+                      BraintreeDropInResult? result = await BraintreeDropIn.start(request);
+                      if (result != null) {
+                        ModelPesanan pesanan = ModelPesanan(id: 1, user: mainProvider.user!, paketWedding: paketWedding, notes: eNotes.text, createdAt: DateTime.now(), updatedAt: DateTime.now());
+                        var createPesanan = await ApiPesanan.instance.createPesanan(pesanan);
+                        if (createPesanan) {
+                          EasyLoading.showSuccess("Successfully buy");
+                          mainProvider.onSideBarItemTap(context, 1);
+                          Navigator.popUntil(context, (ModalRoute.withName(MainScreen.KEY)));
                         } else {
-                          EasyLoading.showError("Login Failed");
+                          EasyLoading.showError("Failed to buy");
                         }
                       } else {
-                        EasyLoading.showError("Email and Password must be filled");
+                        EasyLoading.showError("Failed to buy");
                       }
                     },
-                    title: "Login",
-                  ),
-                  SizedBox(
-                    height: 70,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushReplacementNamed(context, RegisterScreen.KEY);
-                    },
-                    child: Text(
-                      "Register",
-                      style: TextStyle(color: Color.fromRGBO(143, 148, 251, 1)),
-                    ),
+                    title: "Yes, Buy!",
                   ),
                 ],
               ),

@@ -1,12 +1,32 @@
+import 'package:admin/models/model_pesanan.dart';
+import 'package:admin/providers/main_provider.dart';
+import 'package:admin/providers/pesanan_provider.dart';
+import 'package:admin/screens/pesanan/detail_pesanan_screen.dart';
+import 'package:admin/utility/route_argument.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
 
 import '../../../utility/constants.dart';
 import 'item_paket_wedding.dart';
 
-class ListPesanan extends StatelessWidget {
+class ListPesanan extends StatefulWidget {
   const ListPesanan({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<ListPesanan> createState() => _ListPesananState();
+}
+
+class _ListPesananState extends State<ListPesanan> {
+  @override
+  void initState() {
+    SchedulerBinding.instance?.addPostFrameCallback((_) {
+      if (context.read<MainProvider>().user != null) context.read<PesananProvider>().initPesanan(context.read<MainProvider>().user!.id.toString());
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,30 +48,25 @@ class ListPesanan extends StatelessWidget {
           ),
           // SizedBox(height: defaultPadding),
           // Chart(),
-          ItemPaketWedding(
-            image: "https://phinemo.com/wp-content/uploads/2020/05/43546614_332753363937314_8020525196903446510_n-min.jpg",
-            title: "Paket 1",
-            price: "Rp. 1.000.000",
-            descriptions: "lorem ip sumet lorem ip sumet lorem ip sumet lorem ip sumet lorem ip sumet lorem",
-          ),
-          ItemPaketWedding(
-            image: "https://phinemo.com/wp-content/uploads/2020/05/43546614_332753363937314_8020525196903446510_n-min.jpg",
-            title: "Paket 2",
-            price: "Rp. 2.000.000",
-            descriptions: "lorem ip sumet lorem ip sumet lorem ip sumet lorem ip sumet lorem ip sumet lorem",
-          ),
-          ItemPaketWedding(
-            image: "https://phinemo.com/wp-content/uploads/2020/05/43546614_332753363937314_8020525196903446510_n-min.jpg",
-            title: "Paket 3",
-            price: "Rp. 3.000.000",
-            descriptions: "lorem ip sumet lorem ip sumet lorem ip sumet lorem ip sumet lorem ip sumet lorem",
-          ),
-          ItemPaketWedding(
-            image: "https://phinemo.com/wp-content/uploads/2020/05/43546614_332753363937314_8020525196903446510_n-min.jpg",
-            title: "Paket 4",
-            price: "Rp. 4.000.000",
-            descriptions: "lorem ip sumet lorem ip sumet lorem ip sumet lorem ip sumet lorem ip sumet lorem",
-          ),
+          Consumer<PesananProvider>(builder: (context, pesananProvider, _) {
+            return pesananProvider.pesanan.isEmpty
+                ? SizedBox.shrink()
+                : ListView.builder(
+                    itemCount: pesananProvider.pesanan.length,
+                    shrinkWrap: true,
+                    primary: false,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, DetailPesananScreen.KEY, arguments: RouteArgument<ModelPesanan>(passingData: pesananProvider.pesanan[index]));
+                        },
+                        child: ItemPesanan(
+                          pesanan: pesananProvider.pesanan[index],
+                        ),
+                      );
+                    },
+                  );
+          }),
         ],
       ),
     );

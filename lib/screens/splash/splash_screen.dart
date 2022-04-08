@@ -1,6 +1,7 @@
-import 'package:admin/screens/auth/login_screen.dart';
+import 'package:admin/providers/main_provider.dart';
 import 'package:admin/utility/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   static const KEY = "/SplashScreen";
@@ -12,9 +13,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 2)).then((value) {
-      Navigator.pushReplacementNamed(context, LoginScreen.KEY);
-    });
+    context.read<MainProvider>().initSession(context);
     super.initState();
   }
 

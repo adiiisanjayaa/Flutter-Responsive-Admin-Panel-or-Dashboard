@@ -5,7 +5,12 @@ import 'package:flutter/material.dart';
 
 import '../../utility/constants.dart';
 
-class PaketWeddingScreen extends StatelessWidget {
+class PaketWeddingScreen extends StatefulWidget {
+  @override
+  State<PaketWeddingScreen> createState() => _PaketWeddingScreenState();
+}
+
+class _PaketWeddingScreenState extends State<PaketWeddingScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(

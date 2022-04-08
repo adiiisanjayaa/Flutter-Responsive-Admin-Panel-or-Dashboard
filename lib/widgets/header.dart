@@ -1,6 +1,8 @@
+import 'package:admin/providers/main_provider.dart';
 import 'package:admin/providers/menu_provider.dart';
 import 'package:admin/responsive.dart';
 import 'package:admin/screens/profile/profile_screen.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -63,20 +65,26 @@ class ProfileCard extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(10)),
           border: Border.all(color: Colors.white10),
         ),
-        child: Row(
-          children: [
-            Image.asset(
-              "assets/images/profile_pic.png",
-              height: 38,
-            ),
-            if (!Responsive.isMobile(context))
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-                child: Text("Angelina Jolie"),
-              ),
-            Icon(Icons.keyboard_arrow_down),
-          ],
-        ),
+        child: Consumer<MainProvider>(builder: (context, mainProvider, _) {
+          return mainProvider.user != null
+              ? Row(
+                  children: [
+                    ExtendedImage.network(
+                      mainProvider.user!.image ?? "",
+                      width: 38,
+                      height: 38,
+                      shape: BoxShape.circle,
+                    ),
+                    if (!Responsive.isMobile(context))
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+                        child: Text(mainProvider.user!.name),
+                      ),
+                    Icon(Icons.keyboard_arrow_down),
+                  ],
+                )
+              : SizedBox.shrink();
+        }),
       ),
     );
   }

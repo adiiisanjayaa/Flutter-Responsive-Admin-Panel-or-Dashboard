@@ -1,7 +1,7 @@
 import 'package:admin/providers/menu_provider.dart';
 import 'package:admin/providers/main_provider.dart';
 import 'package:admin/responsive.dart';
-import 'package:admin/screens/main/paket_wedding.dart';
+import 'package:admin/screens/paket_wedding/paket_wedding.dart';
 import 'package:admin/screens/main/pesanan.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
