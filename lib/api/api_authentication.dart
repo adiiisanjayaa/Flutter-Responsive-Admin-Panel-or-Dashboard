@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:admin/models/model_register.dart';
 import 'package:admin/models/model_user.dart';
 import 'package:admin/utility/client.dart';
 import 'package:admin/utility/helpers.dart';
@@ -29,17 +30,18 @@ class ApiAuthentication {
   }
 
   //FUNCTION REGISTER
-  Future<String?> apiRegister(String email, String username, String password) async {
+  Future<bool> apiRegister(ModelRegister register) async {
     _dioAuth = Dio();
     try {
       var response = await _dioAuth.post(
         _urlRegister,
-        data: Helpers.buildRegisterData(email, username, password),
+        data: Helpers.buildRegisterData(register),
       );
-      return response.data["jwt"];
+      print(response.data);
+      return response.data["jwt"] != null ? true : false;
     } catch (e) {
       log("apiRegisterError: " + e.toString());
-      return null;
+      return false;
     }
   }
 

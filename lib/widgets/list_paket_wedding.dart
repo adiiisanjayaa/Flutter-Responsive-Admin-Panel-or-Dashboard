@@ -49,7 +49,7 @@ class _ListPaketWeddingState extends State<ListPaketWedding> {
           ),
         ),
         Text(
-          "lorem ip sumet lorem ip sumet lorem ip sumet lorem ip sumet lorem ip sumet lorem ip sumet lorem ip sumet lorem ip sumet lorem ip sumet lorem ip sumet",
+          "The Wedding Package consists of details of things needed in a wedding event, such as catering, waiter team, boarding menu, make-up and clothing, documentation, entertainment (single organ, band, acoustics, dangdud etc.), Master of Ceremony (MC) , Decoration, Party Supplies.",
           style: TextStyle(
             fontSize: 15,
           ),

@@ -19,7 +19,7 @@ class ModelUser {
   String name;
   String username;
   String email;
-  String alamat;
+  String? alamat;
   String noHp;
   String jenisKelamin;
   String? image;
@@ -40,11 +40,13 @@ class ModelUser {
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         name: json["name"],
-        image: json["image"] is Map
-            ? Helpers.getServerImage(json["image"])
-            : json["image"].contains(Client.baseImageUrl)
-                ? json["image"]
-                : null,
+        image: json["image"] != null
+            ? json["image"] is Map
+                ? Helpers.getServerImage(json["image"])
+                : json["image"].contains(Client.baseImageUrl)
+                    ? json["image"]
+                    : null
+            : null,
       );
 
   Map<String, dynamic> toJson() => {

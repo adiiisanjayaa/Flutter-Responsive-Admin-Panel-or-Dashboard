@@ -64,13 +64,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
-  data_table_2:
-    dependency: "direct main"
-    description:
-      name: data_table_2
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.2.1"
   dio:
     dependency: "direct main"
     description:
@@ -78,13 +71,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.6"
-  equatable:
-    dependency: transitive
-    description:
-      name: equatable
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.3"
   extended_image:
     dependency: "direct main"
     description:
@@ -127,13 +113,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.5.1"
-  fl_chart:
-    dependency: "direct main"
-    description:
-      name: fl_chart
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.36.4"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -331,13 +310,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.5"
-  pedantic:
-    dependency: transitive
-    description:
-      name: pedantic
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.11.1"
   petitparser:
     dependency: transitive
     description:

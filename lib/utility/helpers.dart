@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:admin/models/model_register.dart';
 import 'package:intl/intl.dart';
 
 import 'package:admin/utility/client.dart' as client;
@@ -25,11 +26,14 @@ class Helpers {
     });
   }
 
-  static String buildRegisterData(String email, String username, String password) {
+  static String buildRegisterData(ModelRegister register) {
     return jsonEncode({
-      "email": email,
-      "username": username,
-      "password": password,
+      "name": register.name,
+      "email": register.email,
+      "username": register.email,
+      "no_hp": register.telp,
+      "jenis_kelamin": register.kelamin,
+      "password": register.pass,
     });
   }
 

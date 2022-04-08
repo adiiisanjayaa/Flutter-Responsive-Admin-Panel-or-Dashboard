@@ -39,7 +39,7 @@ class ApiUser {
         data: Helpers.buildUpdateUserData(
           user.name,
           user.email,
-          user.alamat,
+          user.alamat ?? "",
           user.noHp,
         ),
       );

@@ -33,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         mainProvider.updateUser = mainProvider.user;
         eName.text = mainProvider.user!.name;
         eEmail.text = mainProvider.user!.email;
-        eAlamat.text = mainProvider.user!.alamat;
+        eAlamat.text = mainProvider.user!.alamat ?? "";
         eTelp.text = mainProvider.user!.noHp;
       }
     });
