@@ -32,6 +32,11 @@ class MainProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  setUpdateUser(user) {
+    _user = user;
+    notifyListeners();
+  }
+
   Future initSession(context) async {
     var newUser = await SessionManager.instance.getUser();
 

@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:admin/api/api_user.dart';
 import 'package:admin/providers/main_provider.dart';
 import 'package:admin/screens/auth/login_screen.dart';
 import 'package:admin/utility/session_manager.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -16,10 +19,26 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  var mainProvider;
   TextEditingController eName = TextEditingController();
   TextEditingController eEmail = TextEditingController();
   TextEditingController eAlamat = TextEditingController();
   TextEditingController eTelp = TextEditingController();
+
+  @override
+  void initState() {
+    mainProvider = context.read<MainProvider>();
+    SchedulerBinding.instance?.addPostFrameCallback((_) {
+      if (mainProvider.user != null) {
+        mainProvider.updateUser = mainProvider.user;
+        eName.text = mainProvider.user!.name;
+        eEmail.text = mainProvider.user!.email;
+        eAlamat.text = mainProvider.user!.alamat;
+        eTelp.text = mainProvider.user!.noHp;
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,16 +54,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         body: SingleChildScrollView(
           child: Container(
             child: Consumer<MainProvider>(builder: (context, mainProvider, _) {
-              SchedulerBinding.instance?.addPostFrameCallback((_) {
-                if (mainProvider.user != null) {
-                  mainProvider.updateUser = mainProvider.user;
-                  eName.text = mainProvider.user!.name;
-                  eEmail.text = mainProvider.user!.email;
-                  eAlamat.text = mainProvider.user!.alamat;
-                  eTelp.text = mainProvider.user!.noHp;
-                }
-              });
-
               return Column(
                 children: <Widget>[
                   Container(
@@ -82,14 +91,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             margin: EdgeInsets.only(top: 100),
                             child: Column(
                               children: [
-                                SizedBox(
-                                  height: 100,
-                                  width: 100,
-                                  child: ExtendedImage.network(
-                                    mainProvider.user!.image ?? "",
-                                    fit: BoxFit.cover,
-                                    cache: true,
-                                    shape: BoxShape.circle,
+                                GestureDetector(
+                                  onTap: () async {
+                                    await FilePicker.platform.pickFiles(type: FileType.image).then((value) async {
+                                      if (value != null) {
+                                        var path = value.files.single.path;
+                                        if (path != null) {
+                                          await ApiUser.instance.putProfileImage(File(path), mainProvider.user!.id.toString());
+                                          var user = await ApiUser.instance.getUser(mainProvider.user!.email);
+                                          EasyLoading.dismiss();
+                                          if (user != null) {
+                                            SessionManager.instance.setUser(user);
+                                            mainProvider.setUpdateUser(user);
+                                          }
+                                        }
+                                      }
+                                    });
+                                  },
+                                  child: SizedBox(
+                                    height: 100,
+                                    width: 100,
+                                    child: ExtendedImage.network(
+                                      mainProvider.user!.image ?? "",
+                                      fit: BoxFit.cover,
+                                      cache: true,
+                                      shape: BoxShape.circle,
+                                    ),
                                   ),
                                 ),
                                 Center(
