@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:admin/api/api_authentication.dart';
 import 'package:admin/models/model_register.dart';
 import 'package:admin/models/model_user.dart';
-import 'package:admin/screens/auth/login_screen.dart';
 import 'package:admin/screens/main/main_screen.dart';
 import 'package:admin/utility/session_manager.dart';
 import 'package:flutter/material.dart';
@@ -77,12 +76,10 @@ class MainProvider extends ChangeNotifier {
 
   Future initSession(context) async {
     var newUser = await SessionManager.instance.getUser();
-
-    if (newUser == null) {
-      Navigator.pushReplacementNamed(context, LoginScreen.KEY);
-    } else {
+    if (newUser != null) {
       _user = ModelUser.fromJson(json.decode(newUser));
-      Navigator.pushReplacementNamed(context, MainScreen.KEY);
     }
+
+    Navigator.pushReplacementNamed(context, MainScreen.KEY);
   }
 }

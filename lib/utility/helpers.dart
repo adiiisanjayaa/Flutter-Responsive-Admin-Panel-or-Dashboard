@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:admin/models/model_pesanan.dart';
 import 'package:admin/models/model_register.dart';
 import 'package:intl/intl.dart';
 
@@ -46,11 +47,12 @@ class Helpers {
     });
   }
 
-  static String buildCreatePesananData(int idPaketWedding, int idUser, String notes) {
+  static String buildCreatePesananData(ModelPesanan pesanan) {
     return jsonEncode({
-      "paket_weddings": idPaketWedding,
-      "users_permissions_users": idUser,
-      "notes": notes,
+      "paket_weddings": pesanan.paketWedding.id,
+      "users_permissions_users": pesanan.user.id,
+      "notes": pesanan.notes,
+      "status": pesanan.status,
     });
   }
 

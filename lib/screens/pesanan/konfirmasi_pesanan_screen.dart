@@ -1,23 +1,35 @@
-import 'package:admin/api/api_pesanan.dart';
-import 'package:admin/models/model_paket_wedding.dart';
-import 'package:admin/models/model_pesanan.dart';
-import 'package:admin/providers/main_provider.dart';
-import 'package:admin/responsive.dart';
-import 'package:admin/screens/main/main_screen.dart';
-import 'package:admin/utility/route_argument.dart';
-import 'package:admin/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_braintree/flutter_braintree.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import 'package:admin/api/api_pesanan.dart';
+import 'package:admin/models/model_paket_wedding.dart';
+import 'package:admin/models/model_pesanan.dart';
+import 'package:admin/providers/main_provider.dart';
+import 'package:admin/responsive.dart';
+import 'package:admin/screens/main/main_screen.dart';
+import 'package:admin/utility/assets.dart';
+import 'package:admin/utility/client.dart';
+import 'package:admin/utility/route_argument.dart';
+import 'package:admin/widgets/custom_button.dart';
+
+class KonfirmasiPesananScreenArguments {
+  final ModelPaketWedding paketWedding;
+  final bool isCOD;
+  KonfirmasiPesananScreenArguments({
+    required this.paketWedding,
+    required this.isCOD,
+  });
+}
+
 class KonfirmasiPesananScreen extends StatefulWidget {
   static const KEY = "/KonfirmasiPesananScreen";
-  final RouteArgument<ModelPaketWedding> paketWedding;
+  final RouteArgument<KonfirmasiPesananScreenArguments> data;
   const KonfirmasiPesananScreen({
     Key? key,
-    required this.paketWedding,
+    required this.data,
   }) : super(key: key);
 
   @override
@@ -29,7 +41,8 @@ class _KonfirmasiPesananScreenState extends State<KonfirmasiPesananScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var paketWedding = widget.paketWedding.passingData;
+    var paketWedding = widget.data.passingData.paketWedding;
+    var isCOD = widget.data.passingData.isCOD;
     var mainProvider = context.read<MainProvider>();
     return Scaffold(
         body: SingleChildScrollView(
@@ -38,7 +51,11 @@ class _KonfirmasiPesananScreenState extends State<KonfirmasiPesananScreen> {
           children: <Widget>[
             Container(
               height: 400,
-              decoration: Responsive.isMobile(context) ? BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/background.png'), fit: BoxFit.fill)) : null,
+              decoration: Responsive.isMobile(context)
+                  ? BoxDecoration(
+                      image: DecorationImage(image: AssetImage(Assets.bgForm), fit: BoxFit.fill),
+                    )
+                  : null,
               child: Stack(
                 children: <Widget>[
                   Positioned(
@@ -46,7 +63,7 @@ class _KonfirmasiPesananScreenState extends State<KonfirmasiPesananScreen> {
                     width: 80,
                     height: 200,
                     child: Container(
-                      decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/light-1.png'))),
+                      decoration: BoxDecoration(image: DecorationImage(image: AssetImage(Assets.bgLight1))),
                     ),
                   ),
                   Positioned(
@@ -54,7 +71,7 @@ class _KonfirmasiPesananScreenState extends State<KonfirmasiPesananScreen> {
                     width: 80,
                     height: 150,
                     child: Container(
-                      decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/light-2.png'))),
+                      decoration: BoxDecoration(image: DecorationImage(image: AssetImage(Assets.bgLight2))),
                     ),
                   ),
                   Positioned(
@@ -63,7 +80,7 @@ class _KonfirmasiPesananScreenState extends State<KonfirmasiPesananScreen> {
                     width: 80,
                     height: 150,
                     child: Container(
-                      decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/clock.png'))),
+                      decoration: BoxDecoration(image: DecorationImage(image: AssetImage(Assets.bgClock))),
                     ),
                   ),
                   Positioned(
@@ -72,7 +89,8 @@ class _KonfirmasiPesananScreenState extends State<KonfirmasiPesananScreen> {
                       child: Center(
                         child: Text(
                           paketWedding.namaPaket,
-                          style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ),
@@ -111,16 +129,30 @@ class _KonfirmasiPesananScreenState extends State<KonfirmasiPesananScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: 30,
-                  ),
+                  SizedBox(height: 30),
                   CustomButton(
                     onTap: () async {
-                      if (Responsive.isDesktop(context)) {
-                        EasyLoading.showInfo("Pembelian hanya bisa melalui App Android/IOS");
+                      if (isCOD) {
+                        ModelPesanan pesanan = ModelPesanan(
+                          id: 1,
+                          status: 'unpaid',
+                          user: mainProvider.user!,
+                          paketWedding: paketWedding,
+                          notes: eNotes.text,
+                          createdAt: DateTime.now(),
+                          updatedAt: DateTime.now(),
+                        );
+                        var createPesanan = await ApiPesanan.instance.createPesanan(pesanan);
+                        if (createPesanan) {
+                          EasyLoading.showSuccess("Successfully order");
+                          mainProvider.onSideBarItemTap(context, 1);
+                          Navigator.popUntil(context, (ModalRoute.withName(MainScreen.KEY)));
+                        } else {
+                          EasyLoading.showError("Failed to order");
+                        }
                       } else {
                         final request = BraintreeDropInRequest(
-                          clientToken: 'sandbox_9qscg4sx_hy3cv2djtg9ph6xq',
+                          clientToken: Client.clientToken,
                           collectDeviceData: true,
                           googlePaymentRequest: BraintreeGooglePaymentRequest(
                             totalPrice: paketWedding.totalHarga.toString(),
@@ -135,7 +167,15 @@ class _KonfirmasiPesananScreenState extends State<KonfirmasiPesananScreen> {
 
                         BraintreeDropInResult? result = await BraintreeDropIn.start(request);
                         if (result != null) {
-                          ModelPesanan pesanan = ModelPesanan(id: 1, user: mainProvider.user!, paketWedding: paketWedding, notes: eNotes.text, createdAt: DateTime.now(), updatedAt: DateTime.now());
+                          ModelPesanan pesanan = ModelPesanan(
+                            id: 1,
+                            status: 'paid',
+                            user: mainProvider.user!,
+                            paketWedding: paketWedding,
+                            notes: eNotes.text,
+                            createdAt: DateTime.now(),
+                            updatedAt: DateTime.now(),
+                          );
                           var createPesanan = await ApiPesanan.instance.createPesanan(pesanan);
                           if (createPesanan) {
                             EasyLoading.showSuccess("Successfully buy");
@@ -149,7 +189,7 @@ class _KonfirmasiPesananScreenState extends State<KonfirmasiPesananScreen> {
                         }
                       }
                     },
-                    title: "Yes, Buy!",
+                    title: isCOD ? "Order" : "Yes, Buy!",
                   ),
                 ],
               ),

@@ -53,7 +53,7 @@ class RouteGenerator {
         );
       case KonfirmasiPesananScreen.KEY:
         return MaterialPageRoute(
-          builder: (context) => KonfirmasiPesananScreen(paketWedding: args as RouteArgument<ModelPaketWedding>),
+          builder: (context) => KonfirmasiPesananScreen(data: args as RouteArgument<KonfirmasiPesananScreenArguments>),
           settings: RouteSettings(name: KonfirmasiPesananScreen.KEY),
         );
       case PreviewImagePage.KEY:

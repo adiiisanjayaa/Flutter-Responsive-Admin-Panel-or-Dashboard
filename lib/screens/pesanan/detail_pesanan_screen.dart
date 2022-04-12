@@ -59,19 +59,38 @@ class _DetailPesananScreenState extends State<DetailPesananScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(context, PreviewImagePage.KEY, arguments: RouteArgument<String>(passingData: paketWedding.image ?? ""));
-                          },
-                          child: ExtendedImage.network(
-                            paketWedding.image ?? "",
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: Responsive.isDesktop(context) ? 40.h : null,
-                            cache: true,
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                          ),
+                        Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(context, PreviewImagePage.KEY, arguments: RouteArgument<String>(passingData: paketWedding.image ?? ""));
+                              },
+                              child: ExtendedImage.network(
+                                paketWedding.image ?? "",
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: Responsive.isDesktop(context) ? 40.h : null,
+                                cache: true,
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.all(Radius.circular(5)),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 5.sp, vertical: 3.sp),
+                              margin: EdgeInsets.all(5.sp),
+                              decoration: BoxDecoration(
+                                color: green,
+                                borderRadius: BorderRadius.circular(10.sp),
+                              ),
+                              child: Text(
+                                widget.pesanan.passingData.status.toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         Padding(
                           padding: EdgeInsets.all(3.w),

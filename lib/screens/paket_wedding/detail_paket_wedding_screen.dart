@@ -1,5 +1,7 @@
 import 'package:admin/models/model_paket_wedding.dart';
+import 'package:admin/providers/main_provider.dart';
 import 'package:admin/responsive.dart';
+import 'package:admin/screens/auth/login_screen.dart';
 import 'package:admin/screens/paket_wedding/preview_image_screen.dart';
 import 'package:admin/screens/pesanan/konfirmasi_pesanan_screen.dart';
 import 'package:admin/utility/constants.dart';
@@ -9,7 +11,9 @@ import 'package:admin/widgets/custom_button.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:money_formatter/money_formatter.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class DetailPaketWeddingScreen extends StatefulWidget {
@@ -162,16 +166,47 @@ class _DetailPaketWeddingScreenState extends State<DetailPaketWeddingScreen> {
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Container(
-                color: secondaryColor,
-                padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 3.h),
-                child: CustomButton(
-                  onTap: () async {
-                    Navigator.pushNamed(context, KonfirmasiPesananScreen.KEY, arguments: RouteArgument<ModelPaketWedding>(passingData: paketWedding));
-                  },
-                  title: total.output.symbolOnRight,
-                ),
-              ),
+              Consumer<MainProvider>(builder: (context, mainProvider, _) {
+                return Container(
+                  color: secondaryColor,
+                  padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 3.h),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: CustomButton(
+                          onTap: () async {
+                            if (mainProvider.user == null) {
+                              Navigator.pushNamed(context, LoginScreen.KEY);
+                            } else {
+                              Navigator.pushNamed(context, KonfirmasiPesananScreen.KEY,
+                                  arguments: RouteArgument<KonfirmasiPesananScreenArguments>(passingData: KonfirmasiPesananScreenArguments(paketWedding: paketWedding, isCOD: true)));
+                            }
+                          },
+                          title: "COD",
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: CustomButton(
+                          onTap: () async {
+                            if (Responsive.isDesktop(context)) {
+                              EasyLoading.showInfo("This feature is only available on mobile application");
+                            } else {
+                              if (mainProvider.user == null) {
+                                Navigator.pushNamed(context, LoginScreen.KEY);
+                              } else {
+                                Navigator.pushNamed(context, KonfirmasiPesananScreen.KEY,
+                                    arguments: RouteArgument<KonfirmasiPesananScreenArguments>(passingData: KonfirmasiPesananScreenArguments(paketWedding: paketWedding, isCOD: false)));
+                              }
+                            }
+                          },
+                          title: total.output.symbolOnRight,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
             ],
           )
         ],

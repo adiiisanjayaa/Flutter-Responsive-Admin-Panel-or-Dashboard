@@ -2,6 +2,7 @@ import 'package:admin/providers/main_provider.dart';
 import 'package:admin/responsive.dart';
 import 'package:admin/screens/auth/login_screen.dart';
 import 'package:admin/screens/profile/profile_screen.dart';
+import 'package:admin/utility/assets.dart';
 import 'package:admin/utility/constants.dart';
 import 'package:admin/utility/session_manager.dart';
 import 'package:flutter/material.dart';
@@ -16,54 +17,66 @@ class SideMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var mainProvider = context.read<MainProvider>();
-
-    return Drawer(
-      child: ListView(
-        children: [
-          DrawerHeader(
-            child: Image.asset("assets/images/logo.png"),
-          ),
-          DrawerListTile(
-            title: "Paket Wedding",
-            svgSrc: "assets/icons/menu_dashbord.svg",
-            press: () {
-              mainProvider.onSideBarItemTap(context, 0);
-              if (!Responsive.isDesktop(context)) Navigator.pop(context);
-            },
-            index: 0,
-          ),
-          DrawerListTile(
-            title: "Pesanan",
-            svgSrc: "assets/icons/menu_store.svg",
-            press: () {
-              mainProvider.onSideBarItemTap(context, 1);
-              if (!Responsive.isDesktop(context)) Navigator.pop(context);
-            },
-            index: 1,
-          ),
-          DrawerListTile(
-            title: "Profile",
-            svgSrc: "assets/icons/menu_profile.svg",
-            press: () {
-              Navigator.pushNamed(context, ProfileScreen.KEY);
-            },
-            index: 3,
-          ),
-          DrawerListTile(
-            title: "Logout",
-            svgSrc: "assets/icons/menu_setting.svg",
-            press: () async {
-              EasyLoading.show(status: "Loading...");
-              await SessionManager.instance.logout();
-              EasyLoading.dismiss();
-              Navigator.pushReplacementNamed(context, LoginScreen.KEY);
-            },
-            index: 4,
-          ),
-        ],
-      ),
-    );
+    return Consumer<MainProvider>(builder: (context, mainProvider, _) {
+      return Drawer(
+        child: ListView(
+          children: [
+            DrawerHeader(
+              child: Image.asset(Assets.logo),
+            ),
+            DrawerListTile(
+              title: "Paket Wedding",
+              svgSrc: Assets.icMenuDashboard,
+              press: () {
+                mainProvider.onSideBarItemTap(context, 0);
+                if (!Responsive.isDesktop(context)) Navigator.pop(context);
+              },
+              index: 0,
+            ),
+            DrawerListTile(
+              title: "Pesanan",
+              svgSrc: Assets.icMenuStore,
+              press: () {
+                if (mainProvider.user == null) {
+                  Navigator.pushNamed(context, LoginScreen.KEY);
+                } else {
+                  mainProvider.onSideBarItemTap(context, 1);
+                  if (!Responsive.isDesktop(context)) Navigator.pop(context);
+                }
+              },
+              index: 1,
+            ),
+            DrawerListTile(
+              title: "Profile",
+              svgSrc: Assets.icMenuProfile,
+              press: () {
+                if (mainProvider.user == null) {
+                  Navigator.pushNamed(context, LoginScreen.KEY);
+                } else {
+                  Navigator.pushNamed(context, ProfileScreen.KEY);
+                }
+              },
+              index: 3,
+            ),
+            DrawerListTile(
+              title: mainProvider.user == null ? "Login" : "Logout",
+              svgSrc: Assets.icMenuSetting,
+              press: () async {
+                if (mainProvider.user == null) {
+                  Navigator.pushNamed(context, LoginScreen.KEY);
+                } else {
+                  EasyLoading.show(status: "Loading...");
+                  await SessionManager.instance.logout();
+                  EasyLoading.dismiss();
+                  Navigator.pushReplacementNamed(context, LoginScreen.KEY);
+                }
+              },
+              index: 4,
+            ),
+          ],
+        ),
+      );
+    });
   }
 }
 

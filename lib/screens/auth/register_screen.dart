@@ -1,5 +1,7 @@
 import 'package:admin/providers/main_provider.dart';
+import 'package:admin/responsive.dart';
 import 'package:admin/screens/auth/login_screen.dart';
+import 'package:admin/utility/assets.dart';
 import 'package:admin/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -35,7 +37,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
           children: <Widget>[
             Container(
               height: 400,
-              decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/png'), fit: BoxFit.fill)),
+              decoration: Responsive.isMobile(context)
+                  ? BoxDecoration(
+                      image: DecorationImage(image: AssetImage(Assets.bgForm), fit: BoxFit.fill),
+                    )
+                  : null,
               child: Stack(
                 children: <Widget>[
                   Positioned(
@@ -43,7 +49,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     width: 80,
                     height: 200,
                     child: Container(
-                      decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/light-1.png'))),
+                      decoration: BoxDecoration(image: DecorationImage(image: AssetImage(Assets.bgLight1))),
                     ),
                   ),
                   Positioned(
@@ -51,7 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     width: 80,
                     height: 150,
                     child: Container(
-                      decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/light-2.png'))),
+                      decoration: BoxDecoration(image: DecorationImage(image: AssetImage(Assets.bgLight2))),
                     ),
                   ),
                   Positioned(
@@ -60,7 +66,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     width: 80,
                     height: 150,
                     child: Container(
-                      decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/clock.png'))),
+                      decoration: BoxDecoration(image: DecorationImage(image: AssetImage(Assets.bgClock))),
                     ),
                   ),
                   Positioned(

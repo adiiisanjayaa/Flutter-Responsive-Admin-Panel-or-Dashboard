@@ -17,7 +17,7 @@ class ApiPesanan {
     var _dio = ApiInterface.instance.api;
     _dio.options.queryParameters.clear();
     try {
-      var response = await _dio.get(_pesanans + "?users_permissions_users=$userId");
+      var response = await _dio.get(_pesanans + "?users_permissions_users=$userId&_sort=created_at:desc");
       return ModelPesanan.fromJsonList(response.data);
     } catch (e) {
       log("failed getPesanan: " + e.toString());
@@ -30,7 +30,7 @@ class ApiPesanan {
     var _dio = ApiInterface.instance.api;
     _dio.options.queryParameters.clear();
     try {
-      var response = await _dio.post(_pesanans, data: Helpers.buildCreatePesananData(pesanan.paketWedding.id, pesanan.user.id, pesanan.notes));
+      var response = await _dio.post(_pesanans, data: Helpers.buildCreatePesananData(pesanan));
       return response.statusCode == 200 ? true : false;
     } catch (e) {
       log("failed createPesanan: " + e.toString());

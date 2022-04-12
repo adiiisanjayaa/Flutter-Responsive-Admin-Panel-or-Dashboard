@@ -4,6 +4,7 @@ import 'package:admin/api/api_user.dart';
 import 'package:admin/providers/main_provider.dart';
 import 'package:admin/responsive.dart';
 import 'package:admin/screens/auth/login_screen.dart';
+import 'package:admin/utility/assets.dart';
 import 'package:admin/utility/session_manager.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:file_picker/file_picker.dart';
@@ -61,7 +62,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: <Widget>[
                   Container(
                     height: 400,
-                    decoration: Responsive.isMobile(context) ? BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/background.png'), fit: BoxFit.fill)) : null,
+                    decoration: Responsive.isMobile(context)
+                        ? BoxDecoration(
+                            image: DecorationImage(image: AssetImage(Assets.bgForm), fit: BoxFit.fill),
+                          )
+                        : null,
                     child: Stack(
                       children: <Widget>[
                         Positioned(
@@ -69,7 +74,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           width: 80,
                           height: 200,
                           child: Container(
-                            decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/light-1.png'))),
+                            decoration: BoxDecoration(image: DecorationImage(image: AssetImage(Assets.bgLight1))),
                           ),
                         ),
                         Positioned(
@@ -77,7 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           width: 80,
                           height: 150,
                           child: Container(
-                            decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/light-2.png'))),
+                            decoration: BoxDecoration(image: DecorationImage(image: AssetImage(Assets.bgLight2))),
                           ),
                         ),
                         Positioned(
@@ -86,7 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           width: 80,
                           height: 150,
                           child: Container(
-                            decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/clock.png'))),
+                            decoration: BoxDecoration(image: DecorationImage(image: AssetImage(Assets.bgClock))),
                           ),
                         ),
                         Positioned(
@@ -115,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     height: 100,
                                     width: 100,
                                     child: ExtendedImage.network(
-                                      mainProvider.user!.image ?? "",
+                                      mainProvider.user!.image ?? "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
                                       fit: BoxFit.cover,
                                       cache: true,
                                       shape: BoxShape.circle,

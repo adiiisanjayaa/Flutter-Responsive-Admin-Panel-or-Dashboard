@@ -6,6 +6,7 @@ class ModelPesanan {
   ModelUser user;
   ModelPaketWedding paketWedding;
   String notes;
+  String status;
   DateTime createdAt;
   DateTime updatedAt;
   ModelPesanan({
@@ -15,6 +16,7 @@ class ModelPesanan {
     required this.notes,
     required this.createdAt,
     required this.updatedAt,
+    required this.status,
   });
 
   static List<ModelPesanan> fromJsonList(jsonList) {
@@ -28,5 +30,6 @@ class ModelPesanan {
         notes: json["notes"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
+        status: json["status"],
       );
 }

@@ -1,7 +1,9 @@
 import 'package:admin/providers/main_provider.dart';
 import 'package:admin/providers/menu_provider.dart';
 import 'package:admin/responsive.dart';
+import 'package:admin/screens/auth/login_screen.dart';
 import 'package:admin/screens/profile/profile_screen.dart';
+import 'package:admin/utility/assets.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -45,43 +47,52 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, ProfileScreen.KEY);
-      },
-      child: Container(
-        margin: EdgeInsets.only(left: defaultPadding),
-        padding: EdgeInsets.symmetric(
-          horizontal: defaultPadding,
-          vertical: defaultPadding / 2,
-        ),
-        decoration: BoxDecoration(
-          color: secondaryColor,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-          border: Border.all(color: Colors.white10),
-        ),
-        child: Consumer<MainProvider>(builder: (context, mainProvider, _) {
-          return mainProvider.user != null
-              ? Row(
-                  children: [
-                    ExtendedImage.network(
-                      mainProvider.user!.image ?? "",
-                      width: 38,
-                      height: 38,
-                      shape: BoxShape.circle,
-                    ),
-                    if (!Responsive.isMobile(context))
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-                        child: Text(mainProvider.user!.name),
-                      ),
-                    Icon(Icons.keyboard_arrow_down),
-                  ],
-                )
-              : SizedBox.shrink();
-        }),
-      ),
-    );
+    return Consumer<MainProvider>(builder: (context, mainProvider, _) {
+      return mainProvider.user == null
+          ? IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, LoginScreen.KEY);
+              },
+              icon: Icon(Icons.login),
+            )
+          : GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, ProfileScreen.KEY);
+              },
+              child: Container(
+                margin: EdgeInsets.only(left: defaultPadding),
+                padding: EdgeInsets.symmetric(
+                  horizontal: defaultPadding,
+                  vertical: defaultPadding / 2,
+                ),
+                decoration: BoxDecoration(
+                  color: secondaryColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  border: Border.all(color: Colors.white10),
+                ),
+                child: Consumer<MainProvider>(builder: (context, mainProvider, _) {
+                  return mainProvider.user != null
+                      ? Row(
+                          children: [
+                            ExtendedImage.network(
+                              mainProvider.user!.image ?? "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+                              width: 38,
+                              height: 38,
+                              shape: BoxShape.circle,
+                            ),
+                            if (!Responsive.isMobile(context))
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+                                child: Text(mainProvider.user!.name),
+                              ),
+                            Icon(Icons.keyboard_arrow_down),
+                          ],
+                        )
+                      : SizedBox.shrink();
+                }),
+              ),
+            );
+    });
   }
 }
 
@@ -110,7 +121,7 @@ class SearchField extends StatelessWidget {
               color: primaryColor,
               borderRadius: const BorderRadius.all(Radius.circular(10)),
             ),
-            child: SvgPicture.asset("assets/icons/Search.svg"),
+            child: SvgPicture.asset(Assets.icMenuSearch),
           ),
         ),
       ),
